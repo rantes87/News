@@ -85,20 +85,13 @@
             .header-buttons { flex-direction: column; }
         }
 
-        /* --- CARDS --- */
+        /* --- CARDS (No Animation) --- */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
-            border-color: rgba(59, 130, 246, 0.3);
         }
 
         .card h2 {
@@ -144,15 +137,13 @@
             box-sizing: border-box;
             margin-bottom: 10px;
             font-family: inherit;
-            transition: border-color 0.2s;
         }
         input:focus {
             outline: none;
             border-color: var(--primary-blue);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
-        /* --- ANIMATED BUTTONS --- */
+        /* --- BUTTONS (Subtle Animation Only) --- */
         button {
             padding: 14px 20px;
             border-radius: 8px;
@@ -163,36 +154,40 @@
             font-size: 14px;
             position: relative;
             overflow: hidden;
-            /* Spring-like bounce on hover */
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* Changed to simple ease for "slight" effect */
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
         }
         
+        /* Slight lift and brightness boost */
         button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+            transform: translateY(-1px);
             filter: brightness(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         button:active {
-            transform: translateY(1px) scale(0.98);
-            box-shadow: 0 2px 5px -2px rgba(0,0,0,0.3);
+            transform: translateY(1px);
+            box-shadow: none;
         }
         
         button.full-width { width: 100%; margin-bottom: 10px; }
 
-        .btn-blue { background: var(--primary-blue); color: white; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
-        .btn-red { background: var(--danger-red); color: white; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4); }
-        .btn-gold { background: var(--gold); color: black; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.4); }
+        .btn-blue { background: var(--primary-blue); color: white; }
+        .btn-red { background: var(--danger-red); color: white; }
+        .btn-gold { background: var(--gold); color: black; }
 
         .btn-outline {
             background: transparent;
             border: 1px solid var(--border);
             color: var(--text-muted);
         }
+        
+        /* Slight glow for outline buttons */
         .btn-outline:hover { 
             border-color: var(--primary-blue); 
             color: white;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.05);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
         }
         
         .btn-outline.active {
@@ -213,8 +208,8 @@
         /* --- EMERGENCY URGENT PULSE ANIMATION --- */
         @keyframes pulse-red-urgent {
             0% { transform: scale(1); background-color: transparent; color: var(--danger-red); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            50% { transform: scale(1.05); background-color: var(--danger-red); color: white; border-color: var(--danger-red); }
-            100% { transform: scale(1); background-color: transparent; color: var(--danger-red); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            50% { transform: scale(1.02); background-color: var(--danger-red); color: white; border-color: var(--danger-red); }
+            100% { transform: scale(1); background-color: transparent; color: var(--danger-red); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
         }
 
         .emergency-btn:hover {
@@ -287,10 +282,14 @@
         .paper-content h1 { color: white; font-size: 32px; border-bottom: 2px solid var(--primary-blue); padding-bottom: 5px; }
         .paper-content h2 { color: white; font-size: 24px; margin-top: 40px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .paper-content h3 { color: var(--primary-blue); font-size: 18px; margin-top: 25px; }
+        .paper-content p { margin-bottom: 15px; }
         .math-box { background: #1e293b; padding: 15px 20px; border-left: 4px solid var(--primary-blue); font-family: 'Courier New', monospace; color: var(--primary-blue); font-weight: bold; margin: 20px 0;}
         .highlight { color: var(--danger-red); font-weight: bold; }
         .quick-start { background: rgba(59, 130, 246, 0.1); border: 1px solid var(--primary-blue); border-radius: 8px; padding: 25px; margin-top: 30px; margin-bottom: 40px; }
         .quick-start h2 { color: var(--primary-blue); margin-top: 0; }
+        .quick-start ul { padding-left: 20px; }
+        .quick-start li { margin-bottom: 10px; color: #e2e8f0; }
+        .meta-info { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; font-family: monospace; }
 
         /* --- BUNNY --- */
         .bunny-mascot { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; z-index: 1000; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
@@ -385,224 +384,69 @@
 <div class="white-paper-container" id="whitepaper-section">
     <div class="paper-content">
         <h1>ProjectM White Paper</h1>
+        <div class="meta-info">
+            VERSION: 1.0.4-DIRECT-BURN | STATUS: LIVE & IMMUTABLE | ADMIN: NONE
+        </div>
+
         <div class="quick-start">
             <h2>⚡ Quick Start Guide</h2>
             <ul>
-                <li><strong>1. Connect:</strong> Link your MetaMask wallet.</li>
-                <li><strong>2. Join:</strong> Click <strong>Send ETH</strong> to auto-join.</li>
-                <li><strong>3. Mine:</strong> Click <strong>Send ETH</strong> again if levels rise.</li>
-                <li><strong>4. Exit:</strong> Use the <strong>Burn Zone</strong>.</li>
+                <li><strong>1. Connect:</strong> Link your MetaMask wallet using the button at the top right.</li>
+                <li><strong>2. Join:</strong> Click the <strong>Send ETH (Join/Mine)</strong> button. This automatically calculates the cost, mints your PMT, and sets your level.</li>
+                <li><strong>3. Mine:</strong> If the global level rises, click "Send ETH" again to catch up and mint new rewards.</li>
+                <li><strong>4. Exit:</strong> Use the <strong>Burn Zone</strong> to destroy tokens and instantly withdraw your share of the ETH treasury.</li>
             </ul>
         </div>
+
         <h2>1. Abstract</h2>
-        <p>ProjectM is an immutable, admin-free protocol where liquidity is owned by the code.</p>
+        <p>ProjectM is a decentralized, autonomous economic experiment deployed on the Ethereum blockchain. It operates as a self-sustaining "Level Protocol" where the cost of entry and the value of participation are determined by algorithmic scarcity and collective participation.</p>
+        <p>Unlike traditional DeFi tokens with arbitrary supplies or developer allocations, ProjectM has <strong>no administrator, no pre-mine, and no owner functions</strong>. It is an immutable smart contract where the liquidity is owned by the protocol itself.</p>
+
+        <h2>2. Protocol Mechanics</h2>
+        <p>The ProjectM economy is driven by a <strong>Global Level System</strong>. The state of the contract is defined by the current <code>contractLevel</code> (starting at 10).</p>
+
+        <h3>2.1 Dynamic Pricing</h3>
+        <p>The cost to enter the protocol is not fixed. It scales linearly with the Global Level. This creates a rising floor for entry, rewarding early participants while requiring higher capital commitment from later entrants.</p>
         <div class="math-box">Price = CurrentLevel × 0.002 ETH</div>
-        <p><strong>Mechanics:</strong> A 10% exit tax stays in the contract, mathematically increasing the backing of all remaining tokens.</p>
-        <h2>2. Advanced Interactions</h2>
-        <p>Use the "Advanced Tools" dashboard to perform standard ERC20 transfers, approvals, or special donation functions like "Go Big".</p>
-    </div>
-</div>
+        <ul>
+            <li><strong>Level 10 (Launch):</strong> 0.02 ETH</li>
+            <li><strong>Level 50:</strong> 0.10 ETH</li>
+            <li><strong>Level 100:</strong> 0.20 ETH</li>
+        </ul>
 
-<a href="https://google.com" target="_blank" class="bunny-mascot" title="Hop away!">
-    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M25 15C15 15 10 40 25 50" fill="white" stroke="#e2e8f0" stroke-width="2"/>
-        <path d="M75 15C85 15 90 40 75 50" fill="white" stroke="#e2e8f0" stroke-width="2"/>
-        <path d="M25 20C20 20 18 35 25 45" fill="#fecdd3"/> 
-        <path d="M75 20C80 20 82 35 75 45" fill="#fecdd3"/> 
-        <circle cx="50" cy="65" r="28" fill="white" stroke="#e2e8f0" stroke-width="2"/>
-        <circle cx="40" cy="60" r="3" fill="#1e293b"/>
-        <circle cx="60" cy="60" r="3" fill="#1e293b"/>
-        <path d="M48 68 Q50 71 52 68" stroke="#f43f5e" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-</a>
+        <h3>2.2 Joining & Mining</h3>
+        <p>Users interact with the protocol by sending ETH directly to the contract:</p>
+        <ul>
+            <li><strong>New Users (Joining):</strong> If a user has 0 balance, they "Join." They pay the current level price and mint <strong>1.00 PMT</strong>.</li>
+            <li><strong>Existing Users (Mining):</strong> If a user joined at a lower level and the Global Level has risen, they pay the current price to update their level. They mint new PMT tokens proportional to the levels skipped.</li>
+        </ul>
 
-<script>
-    // --- CONFIGURATION ---
-    const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS_HERE"; // <--- PASTE ADDRESS HERE
-    
-    const ABI = [
-        "function projectStats() public view returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256)",
-        "function playerStats(address) public view returns (uint256, uint256, uint256, uint256, uint256, uint256)",
-        "function burnSoap(uint256 quantity) external",
-        "function burnAllSoap() external",
-        "function getCurrentPrice() public view returns (uint256)",
-        "function decimals() view returns (uint8)",
-        // New Interactive Functions
-        "function transfer(address to, uint256 amount) external returns (bool)",
-        "function approve(address spender, uint256 amount) external returns (bool)",
-        "function goBig() external payable",
-        "function donate() external payable"
-    ];
+        <h2>3. Tokenomics & The "Soap" Economy</h2>
+        <p>The native token is <strong>PMT</strong> (ProjectM Token), colloquially referred to in the smart contract functions as "Soap."</p>
 
-    let provider, signer, contract;
-    let userAddress = null;
+        <h3>3.1 The Value Backing (The "Burn")</h3>
+        <p>Unlike tokens that rely on external market makers, PMT derives its value from the ETH held inside the contract reserves. Any user can "burn" their PMT at any time to withdraw their share of the treasury.</p>
+        <div class="math-box">Gross Value = (User Balance × Contract ETH) / Total Supply</div>
 
-    function togglePaper() {
-        const paperSection = document.getElementById('whitepaper-section');
-        const btn = document.getElementById('readToggleBtn');
-        paperSection.classList.toggle('visible');
-        if (paperSection.classList.contains('visible')) {
-            btn.innerText = "CLOSE"; btn.classList.add("active");
-            paperSection.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            btn.innerText = "READ"; btn.classList.remove("active");
-        }
-    }
+        <h3>3.2 The Deflationary Tax</h3>
+        <p>ProjectM implements a <span class="highlight">10% Exit Tax</span> on all burns. This is the primary value-accrual engine of the protocol.</p>
+        <p>When a user burns PMT:</p>
+        <ol>
+            <li><strong>100%</strong> of their tokens are destroyed.</li>
+            <li><strong>90%</strong> of the ETH value is sent to the user.</li>
+            <li><strong>10%</strong> of the ETH value remains in the contract permanently.</li>
+        </ol>
+        <p><strong>Economic Implication:</strong> Because the ETH stays in the contract but the tokens representing a claim on that ETH are destroyed, the <strong>backing per remaining token increases mathematically</strong> with every exit.</p>
 
-    function toggleAdvanced() {
-        const advDiv = document.getElementById('advancedDashboard');
-        const btn = document.getElementById('advToggleBtn');
-        advDiv.classList.toggle('open');
-        btn.classList.toggle('active');
-        if(advDiv.classList.contains('open')) {
-            setTimeout(() => advDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
-        }
-    }
+        <h2>4. Advanced Interactions</h2>
+        <ul>
+            <li><strong>Go Big:</strong> Sending excess ETH beyond the required price is treated as a direct donation to the liquidity reserve, instantly increasing the burn value for all holders.</li>
+            <li><strong>Burn Trigger:</strong> Sending exactly <strong>69 gwei</strong> to the contract triggers a full exit (burn all), liquidating the user's position in a single transaction.</li>
+        </ul>
 
-    async function connectWallet() {
-        if (!window.ethereum) return alert("Install MetaMask");
-        try {
-            provider = new ethers.providers.Web3Provider(window.ethereum);
-            await provider.send("eth_requestAccounts", []);
-            signer = provider.getSigner();
-            userAddress = await signer.getAddress();
-            contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
-            document.getElementById("connectBtn").innerText = userAddress.substring(0,6) + "..." + userAddress.substring(38);
-            document.getElementById("connectBtn").classList.replace("btn-blue", "btn-outline");
-            
-            refreshData();
-            setInterval(refreshData, 5000);
-            showStatus("Wallet Connected");
-        } catch (e) {
-            console.error(e);
-            showStatus("Connection Failed");
-        }
-    }
-
-    async function refreshData() {
-        if (!contract) return;
-        try {
-            const pStats = await contract.projectStats();
-            document.getElementById("g_level").innerText = pStats[0].toString();
-            document.getElementById("g_price").innerText = ethers.utils.formatEther(pStats[1]);
-            document.getElementById("g_burnPrice").innerText = ethers.utils.formatEther(pStats[2]);
-            document.getElementById("g_supply").innerText = parseFloat(ethers.utils.formatEther(pStats[4])).toFixed(2);
-            document.getElementById("g_eth").innerText = parseFloat(ethers.utils.formatEther(pStats[5])).toFixed(4);
-            document.getElementById("req_eth").innerText = ethers.utils.formatEther(pStats[1]) + " ETH";
-
-            const mStats = await contract.playerStats(userAddress);
-            document.getElementById("m_level").innerText = mStats[1].toString();
-            document.getElementById("m_balance").innerText = parseFloat(ethers.utils.formatEther(mStats[0])).toFixed(2);
-            document.getElementById("m_mineable").innerText = parseFloat(ethers.utils.formatEther(mStats[2])).toFixed(2);
-            document.getElementById("m_burnVal").innerText = parseFloat(ethers.utils.formatEther(mStats[4])).toFixed(4) + " ETH";
-        } catch (e) { console.error(e); }
-    }
-
-    async function handleJoinMine() {
-        if (!contract) return alert("Connect Wallet");
-        try {
-            showStatus("Sending ETH...");
-            const price = await contract.getCurrentPrice();
-            const tx = await signer.sendTransaction({ to: CONTRACT_ADDRESS, value: price });
-            showStatus("Tx Sent: " + tx.hash);
-            await tx.wait();
-            showStatus("Joined/Mined Successfully!");
-            refreshData();
-        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
-    }
-
-    async function burnTokens() {
-        if (!contract) return alert("Connect Wallet");
-        const val = document.getElementById("burnAmount").value;
-        if (!val) return alert("Enter amount");
-        try {
-            showStatus("Burning...");
-            const tx = await contract.burnSoap(ethers.utils.parseEther(val));
-            showStatus("Tx Pending: " + tx.hash);
-            await tx.wait();
-            showStatus("Burn Confirmed!");
-            refreshData();
-        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
-    }
-
-    async function burnAll() {
-        if (!contract) return alert("Connect Wallet");
-        if (!confirm("Burn ALL tokens?")) return;
-        try {
-            showStatus("Emergency Burn...");
-            const tx = await contract.burnAllSoap();
-            showStatus("Tx Pending: " + tx.hash);
-            await tx.wait();
-            showStatus("Exited Successfully!");
-            refreshData();
-        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
-    }
-
-    // --- ADVANCED FUNCTIONS ---
-    async function handleTransfer() {
-        if (!contract) return alert("Connect Wallet");
-        const to = document.getElementById("transferTo").value;
-        const amt = document.getElementById("transferAmount").value;
-        if(!to || !amt) return alert("Invalid Input");
-        try {
-            showStatus("Transferring...");
-            const tx = await contract.transfer(to, ethers.utils.parseEther(amt));
-            showStatus("Tx Pending: " + tx.hash);
-            await tx.wait();
-            showStatus("Transfer Complete");
-            refreshData();
-        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
-    }
-
-    async function handleApprove() {
-        if (!contract) return alert("Connect Wallet");
-        const sp = document.getElementById("approveSpender").value;
-        const amt = document.getElementById("approveAmount").value;
-        if(!sp || !amt) return alert("Invalid Input");
-        try {
-            showStatus("Approving...");
-            const tx = await contract.approve(sp, ethers.utils.parseEther(amt));
-            showStatus("Tx Pending: " + tx.hash);
-            await tx.wait();
-            showStatus("Approval Complete");
-        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
-    }
-
-    async function handleGoBig() {
-        if (!contract) return alert("Connect Wallet");
-        const val = document.getElementById("goBigAmount").value;
-        if(!val) return alert("Enter ETH Amount");
-        try {
-            showStatus("Going Big...");
-            const tx = await contract.goBig({ value: ethers.utils.parseEther(val) });
-            showStatus("Tx Pending: " + tx.hash);
-            await tx.wait();
-            showStatus("GO BIG Confirmed!");
-            refreshData();
-        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
-    }
-
-    async function handleDonate() {
-        if (!contract) return alert("Connect Wallet");
-        const val = document.getElementById("donateAmount").value;
-        if(!val) return alert("Enter ETH Amount");
-        try {
-            showStatus("Donating...");
-            const tx = await contract.donate({ value: ethers.utils.parseEther(val) });
-            showStatus("Tx Pending: " + tx.hash);
-            await tx.wait();
-            showStatus("Donation Received! Thank you.");
-            refreshData();
-        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
-    }
-
-    function showStatus(msg) {
-        const el = document.getElementById("statusBox");
-        el.innerText = msg;
-        el.classList.remove("hidden");
-    }
-</script>
-
-</body>
-</html>
+        <h2>5. Security</h2>
+        <p>The contract adheres to strict security standards:</p>
+        <ul>
+            <li><strong>Reentrancy Protection:</strong> All state-changing functions are protected by a <code>nonReentrant</code> modifier.</li>
+            <li><strong>Safe Transfers:</strong> ETH payouts use a custom safe transfer function.</li>
+            <li><strong>Immutable Ownership:</strong> The contrac
