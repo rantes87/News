@@ -11,6 +11,7 @@
             --bg-dark: #0B0F19;       /* Deep Navy Black */
             --card-bg: #151B2B;       /* Lighter Navy */
             --paper-bg: #0f1420;      /* Distinct bg for whitepaper */
+            --input-bg: #0F172A;
             --text-main: #FFFFFF;
             --text-muted: #94A3B8;
             --primary-blue: #3B82F6;  /* Liberty Blue */
@@ -19,6 +20,7 @@
             --danger-hover: #DC2626;
             --border: #1E293B;
             --success: #10B981;
+            --gold: #F59E0B;
         }
 
         html { scroll-behavior: smooth; }
@@ -42,7 +44,7 @@
             box-sizing: border-box;
         }
 
-        /* Header */
+        /* --- HEADER --- */
         header {
             display: flex;
             justify-content: space-between;
@@ -70,7 +72,7 @@
             gap: 10px;
         }
 
-        /* Grid Layout */
+        /* --- GRID SYSTEM --- */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -83,13 +85,20 @@
             .header-buttons { flex-direction: column; }
         }
 
-        /* Cards */
+        /* --- CARDS --- */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         .card h2 {
@@ -102,8 +111,15 @@
             border-bottom: 1px solid var(--border);
             padding-bottom: 10px;
         }
+        
+        .card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
 
-        /* Stats Rows */
+        /* --- STATS --- */
         .stat-row {
             display: flex;
             justify-content: space-between;
@@ -117,52 +133,129 @@
             color: var(--primary-blue);
         }
 
-        /* Buttons & Inputs */
+        /* --- INPUTS --- */
         input {
             width: 100%;
-            background: #0F172A;
+            background: var(--input-bg);
             border: 1px solid var(--border);
             color: white;
             padding: 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             box-sizing: border-box;
             margin-bottom: 10px;
             font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
+        /* --- ANIMATED BUTTONS --- */
         button {
             padding: 14px 20px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
             border: none;
-            transition: all 0.2s;
             font-size: 14px;
+            position: relative;
+            overflow: hidden;
+            /* Spring-like bounce on hover */
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 2px 5px -2px rgba(0,0,0,0.3);
         }
         
         button.full-width { width: 100%; margin-bottom: 10px; }
 
-        .btn-blue { background: var(--primary-blue); color: white; }
-        .btn-blue:hover { background: var(--primary-hover); }
-
-        .btn-red { background: var(--danger-red); color: white; }
-        .btn-red:hover { background: var(--danger-hover); }
+        .btn-blue { background: var(--primary-blue); color: white; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4); }
+        .btn-red { background: var(--danger-red); color: white; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4); }
+        .btn-gold { background: var(--gold); color: black; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.4); }
 
         .btn-outline {
             background: transparent;
             border: 1px solid var(--border);
             color: var(--text-muted);
         }
-        .btn-outline:hover { border-color: var(--text-main); color: var(--text-main); }
+        .btn-outline:hover { 
+            border-color: var(--primary-blue); 
+            color: white;
+            background: rgba(59, 130, 246, 0.1);
+        }
         
         .btn-outline.active {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.2);
             border-color: var(--primary-blue);
             color: white;
+            box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+            width: auto;
+            margin: 0 auto;
+            display: block;
         }
 
-        /* Status & Logs */
+        /* --- EMERGENCY URGENT PULSE ANIMATION --- */
+        @keyframes pulse-red-urgent {
+            0% { transform: scale(1); background-color: transparent; color: var(--danger-red); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { transform: scale(1.05); background-color: var(--danger-red); color: white; border-color: var(--danger-red); }
+            100% { transform: scale(1); background-color: transparent; color: var(--danger-red); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+        }
+
+        .emergency-btn:hover {
+            animation: pulse-red-urgent 0.8s ease-in-out infinite !important;
+        }
+
+        /* --- ADVANCED DASHBOARD --- */
+        .advanced-container {
+            width: 100%;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease;
+            opacity: 0;
+            margin-top: 10px;
+        }
+        
+        .advanced-container.open {
+            max-height: 1000px;
+            opacity: 1;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .mini-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .mini-card h4 { margin: 0 0 10px 0; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
+
+        /* --- UTILS --- */
         .status-bar {
             background: #1e293b;
             padding: 10px 15px;
@@ -173,10 +266,9 @@
             min-height: 20px;
             margin-top: 20px;
         }
-        
         .hidden { display: none !important; }
 
-        /* WHITE PAPER SECTION STYLES */
+        /* --- WHITE PAPER --- */
         .white-paper-container {
             margin-top: 40px;
             padding-top: 40px;
@@ -188,88 +280,21 @@
             display: none; 
             animation: slideDown 0.3s ease-out;
         }
-        
         .white-paper-container.visible { display: flex; }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .paper-content {
-            max-width: 800px;
-            padding: 0 20px;
-            line-height: 1.8;
-            color: #cbd5e1;
-        }
-
-        .paper-content h1 {
-            color: white;
-            font-size: 32px;
-            margin-bottom: 10px;
-            border-bottom: 2px solid var(--primary-blue);
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        .paper-content h2 {
-            color: white;
-            font-size: 24px;
-            margin-top: 40px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-        }
-
-        .paper-content h3 {
-            color: var(--primary-blue);
-            font-size: 18px;
-            margin-top: 25px;
-        }
-
-        .paper-content p { margin-bottom: 15px; }
-
-        .quick-start {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid var(--primary-blue);
-            border-radius: 8px;
-            padding: 25px;
-            margin-top: 30px;
-            margin-bottom: 40px;
-        }
-        .quick-start h2 { color: var(--primary-blue); margin-top: 0; border: none; font-size: 20px; }
-        .quick-start ul { padding-left: 20px; }
-        .quick-start li { margin-bottom: 10px; color: #e2e8f0; }
-
-        .math-box {
-            background: #1e293b;
-            padding: 15px 20px;
-            border-left: 4px solid var(--primary-blue);
-            font-family: 'Courier New', monospace;
-            margin: 20px 0;
-            color: var(--primary-blue);
-            font-weight: bold;
-        }
-
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .paper-content { max-width: 800px; padding: 0 20px; line-height: 1.8; color: #cbd5e1; }
+        .paper-content h1 { color: white; font-size: 32px; border-bottom: 2px solid var(--primary-blue); padding-bottom: 5px; }
+        .paper-content h2 { color: white; font-size: 24px; margin-top: 40px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .paper-content h3 { color: var(--primary-blue); font-size: 18px; margin-top: 25px; }
+        .math-box { background: #1e293b; padding: 15px 20px; border-left: 4px solid var(--primary-blue); font-family: 'Courier New', monospace; color: var(--primary-blue); font-weight: bold; margin: 20px 0;}
         .highlight { color: var(--danger-red); font-weight: bold; }
-        .meta-info { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; font-family: monospace; }
+        .quick-start { background: rgba(59, 130, 246, 0.1); border: 1px solid var(--primary-blue); border-radius: 8px; padding: 25px; margin-top: 30px; margin-bottom: 40px; }
+        .quick-start h2 { color: var(--primary-blue); margin-top: 0; }
 
-        /* --- BUNNY STYLES --- */
-        .bunny-mascot {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            z-index: 1000;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
-        }
-
-        .bunny-mascot:hover {
-            transform: translateY(-10px) scale(1.1) rotate(-5deg);
-        }
+        /* --- BUNNY --- */
+        .bunny-mascot { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; z-index: 1000; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        .bunny-mascot:hover { transform: translateY(-10px) scale(1.1) rotate(-5deg); }
     </style>
 </head>
 <body>
@@ -318,7 +343,39 @@
             
             <input type="text" id="burnAmount" placeholder="Amount to burn (e.g. 1.5)">
             <button class="btn-red full-width" onclick="burnTokens()">Burn Specific Amount</button>
-            <button class="btn-outline full-width" style="color:var(--danger-red); border-color:var(--danger-red)" onclick="burnAll()">Burn Everything (Exit)</button>
+            <button class="btn-outline full-width emergency-btn" style="color:var(--danger-red); border-color:var(--danger-red)" onclick="burnAll()">Burn Everything (Exit)</button>
+        </div>
+    </div>
+
+    <button id="advToggleBtn" class="btn-outline btn-small" onclick="toggleAdvanced()">Advanced Tools</button>
+
+    <div id="advancedDashboard" class="advanced-container">
+        <div class="dashboard-grid">
+            <div class="mini-card">
+                <h4>Transfer Tokens</h4>
+                <input type="text" id="transferTo" placeholder="Recipient Address (0x...)">
+                <input type="text" id="transferAmount" placeholder="Amount PMT">
+                <button class="btn-blue full-width" onclick="handleTransfer()">Transfer</button>
+            </div>
+            
+            <div class="mini-card">
+                <h4>Approve Spender</h4>
+                <input type="text" id="approveSpender" placeholder="Spender Address (0x...)">
+                <input type="text" id="approveAmount" placeholder="Amount PMT">
+                <button class="btn-gold full-width" onclick="handleApprove()">Approve</button>
+            </div>
+
+            <div class="mini-card">
+                <h4>Go Big (Donation + Join)</h4>
+                <input type="text" id="goBigAmount" placeholder="ETH Amount (> Entry Price)">
+                <button class="btn-blue full-width" onclick="handleGoBig()">Go Big</button>
+            </div>
+
+             <div class="mini-card">
+                <h4>Donate ETH</h4>
+                <input type="text" id="donateAmount" placeholder="ETH Amount">
+                <button class="btn-outline full-width" onclick="handleDonate()">Donate to Pot</button>
+            </div>
         </div>
     </div>
 
@@ -328,68 +385,21 @@
 <div class="white-paper-container" id="whitepaper-section">
     <div class="paper-content">
         <h1>ProjectM White Paper</h1>
-        <div class="meta-info">
-            VERSION: 1.0.4-DIRECT-BURN | STATUS: LIVE & IMMUTABLE | ADMIN: NONE
-        </div>
-
         <div class="quick-start">
             <h2>⚡ Quick Start Guide</h2>
             <ul>
-                <li><strong>1. Connect:</strong> Link your MetaMask wallet using the button at the top right.</li>
-                <li><strong>2. Join:</strong> Click the <strong>Send ETH (Join/Mine)</strong> button. This automatically calculates the cost, mints your PMT, and sets your level.</li>
-                <li><strong>3. Mine:</strong> If the global level rises, click "Send ETH" again to catch up and mint new rewards.</li>
-                <li><strong>4. Exit:</strong> Use the <strong>Burn Zone</strong> to destroy tokens and instantly withdraw your share of the ETH treasury.</li>
+                <li><strong>1. Connect:</strong> Link your MetaMask wallet.</li>
+                <li><strong>2. Join:</strong> Click <strong>Send ETH</strong> to auto-join.</li>
+                <li><strong>3. Mine:</strong> Click <strong>Send ETH</strong> again if levels rise.</li>
+                <li><strong>4. Exit:</strong> Use the <strong>Burn Zone</strong>.</li>
             </ul>
         </div>
-
         <h2>1. Abstract</h2>
-        <p>ProjectM is a decentralized, autonomous economic experiment deployed on the Ethereum blockchain. It operates as a self-sustaining "Level Protocol" where the cost of entry and the value of participation are determined by algorithmic scarcity and collective participation.</p>
-        <p>Unlike traditional DeFi tokens with arbitrary supplies or developer allocations, ProjectM has <strong>no administrator, no pre-mine, and no owner functions</strong>. It is an immutable smart contract where the liquidity is owned by the protocol itself.</p>
-
-        <h2>2. Protocol Mechanics</h2>
-        <p>The ProjectM economy is driven by a <strong>Global Level System</strong>. The state of the contract is defined by the current <code>contractLevel</code> (starting at 10).</p>
-
-        <h3>2.1 Dynamic Pricing</h3>
-        <p>The cost to enter the protocol is not fixed. It scales linearly with the Global Level. This creates a rising floor for entry, rewarding early participants while requiring higher capital commitment from later entrants.</p>
+        <p>ProjectM is an immutable, admin-free protocol where liquidity is owned by the code.</p>
         <div class="math-box">Price = CurrentLevel × 0.002 ETH</div>
-        <ul>
-            <li><strong>Level 10 (Launch):</strong> 0.02 ETH</li>
-            <li><strong>Level 50:</strong> 0.10 ETH</li>
-            <li><strong>Level 100:</strong> 0.20 ETH</li>
-        </ul>
-
-        <h3>2.2 Joining & Mining</h3>
-        <p>Users interact with the protocol by sending ETH directly to the contract:</p>
-        <ul>
-            <li><strong>New Users (Joining):</strong> If a user has 0 balance, they "Join." They pay the current level price and mint <strong>1.00 PMT</strong>.</li>
-            <li><strong>Existing Users (Mining):</strong> If a user joined at a lower level and the Global Level has risen, they pay the current price to update their level. They mint new PMT tokens proportional to the levels skipped.</li>
-        </ul>
-
-        <h2>3. Tokenomics & The "Soap" Economy</h2>
-        <p>The native token is <strong>PMT</strong> (ProjectM Token), colloquially referred to in the smart contract functions as "Soap."</p>
-
-        <h3>3.1 The Value Backing (The "Burn")</h3>
-        <p>Unlike tokens that rely on external market makers, PMT derives its value from the ETH held inside the contract reserves. Any user can "burn" their PMT at any time to withdraw their share of the treasury.</p>
-        <div class="math-box">Gross Value = (User Balance × Contract ETH) / Total Supply</div>
-
-        <h3>3.2 The Deflationary Tax</h3>
-        <p>ProjectM implements a <span class="highlight">10% Exit Tax</span> on all burns. This is the primary value-accrual engine of the protocol.</p>
-        <p>When a user burns PMT:</p>
-        <ol>
-            <li><strong>100%</strong> of their tokens are destroyed.</li>
-            <li><strong>90%</strong> of the ETH value is sent to the user.</li>
-            <li><strong>10%</strong> of the ETH value remains in the contract permanently.</li>
-        </ol>
-        <p><strong>Economic Implication:</strong> Because the ETH stays in the contract but the tokens representing a claim on that ETH are destroyed, the <strong>backing per remaining token increases mathematically</strong> with every exit.</p>
-
-        <h2>4. Advanced Interactions</h2>
-        <ul>
-            <li><strong>Go Big:</strong> Sending excess ETH beyond the required price is treated as a direct donation to the liquidity reserve, instantly increasing the burn value for all holders.</li>
-            <li><strong>Burn Trigger:</strong> Sending exactly <strong>69 gwei</strong> to the contract triggers a full exit (burn all), liquidating the user's position in a single transaction.</li>
-        </ul>
-
-        <h2>5. Conclusion</h2>
-        <p>ProjectM is a financial game of coordination. It combines the mechanics of a bonding curve with a friction-based value capture system. It is a zero-dependency protocol that will exist as long as Ethereum exists.</p>
+        <p><strong>Mechanics:</strong> A 10% exit tax stays in the contract, mathematically increasing the backing of all remaining tokens.</p>
+        <h2>2. Advanced Interactions</h2>
+        <p>Use the "Advanced Tools" dashboard to perform standard ERC20 transfers, approvals, or special donation functions like "Go Big".</p>
     </div>
 </div>
 
@@ -397,11 +407,11 @@
     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M25 15C15 15 10 40 25 50" fill="white" stroke="#e2e8f0" stroke-width="2"/>
         <path d="M75 15C85 15 90 40 75 50" fill="white" stroke="#e2e8f0" stroke-width="2"/>
-        <path d="M25 20C20 20 18 35 25 45" fill="#fecdd3"/> <path d="M75 20C80 20 82 35 75 45" fill="#fecdd3"/> <circle cx="50" cy="65" r="28" fill="white" stroke="#e2e8f0" stroke-width="2"/>
-        
+        <path d="M25 20C20 20 18 35 25 45" fill="#fecdd3"/> 
+        <path d="M75 20C80 20 82 35 75 45" fill="#fecdd3"/> 
+        <circle cx="50" cy="65" r="28" fill="white" stroke="#e2e8f0" stroke-width="2"/>
         <circle cx="40" cy="60" r="3" fill="#1e293b"/>
         <circle cx="60" cy="60" r="3" fill="#1e293b"/>
-        
         <path d="M48 68 Q50 71 52 68" stroke="#f43f5e" stroke-width="2" stroke-linecap="round"/>
     </svg>
 </a>
@@ -410,14 +420,18 @@
     // --- CONFIGURATION ---
     const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS_HERE"; // <--- PASTE ADDRESS HERE
     
-    // Minimal ABI based on your Solidity code
     const ABI = [
         "function projectStats() public view returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256)",
         "function playerStats(address) public view returns (uint256, uint256, uint256, uint256, uint256, uint256)",
         "function burnSoap(uint256 quantity) external",
         "function burnAllSoap() external",
         "function getCurrentPrice() public view returns (uint256)",
-        "function decimals() view returns (uint8)"
+        "function decimals() view returns (uint8)",
+        // New Interactive Functions
+        "function transfer(address to, uint256 amount) external returns (bool)",
+        "function approve(address spender, uint256 amount) external returns (bool)",
+        "function goBig() external payable",
+        "function donate() external payable"
     ];
 
     let provider, signer, contract;
@@ -426,22 +440,27 @@
     function togglePaper() {
         const paperSection = document.getElementById('whitepaper-section');
         const btn = document.getElementById('readToggleBtn');
-        
         paperSection.classList.toggle('visible');
-
         if (paperSection.classList.contains('visible')) {
-            btn.innerText = "CLOSE";
-            btn.classList.add("active");
+            btn.innerText = "CLOSE"; btn.classList.add("active");
             paperSection.scrollIntoView({ behavior: 'smooth' });
         } else {
-            btn.innerText = "READ";
-            btn.classList.remove("active");
+            btn.innerText = "READ"; btn.classList.remove("active");
+        }
+    }
+
+    function toggleAdvanced() {
+        const advDiv = document.getElementById('advancedDashboard');
+        const btn = document.getElementById('advToggleBtn');
+        advDiv.classList.toggle('open');
+        btn.classList.toggle('active');
+        if(advDiv.classList.contains('open')) {
+            setTimeout(() => advDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
         }
     }
 
     async function connectWallet() {
         if (!window.ethereum) return alert("Install MetaMask");
-        
         try {
             provider = new ethers.providers.Web3Provider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
@@ -454,7 +473,6 @@
             
             refreshData();
             setInterval(refreshData, 5000);
-            
             showStatus("Wallet Connected");
         } catch (e) {
             console.error(e);
@@ -464,7 +482,6 @@
 
     async function refreshData() {
         if (!contract) return;
-
         try {
             const pStats = await contract.projectStats();
             document.getElementById("g_level").innerText = pStats[0].toString();
@@ -479,60 +496,105 @@
             document.getElementById("m_balance").innerText = parseFloat(ethers.utils.formatEther(mStats[0])).toFixed(2);
             document.getElementById("m_mineable").innerText = parseFloat(ethers.utils.formatEther(mStats[2])).toFixed(2);
             document.getElementById("m_burnVal").innerText = parseFloat(ethers.utils.formatEther(mStats[4])).toFixed(4) + " ETH";
-
-        } catch (e) {
-            console.error("Error fetching data", e);
-        }
+        } catch (e) { console.error(e); }
     }
 
     async function handleJoinMine() {
-        if (!contract) return alert("Connect Wallet First");
+        if (!contract) return alert("Connect Wallet");
         try {
-            showStatus("Initiating Transaction...");
+            showStatus("Sending ETH...");
             const price = await contract.getCurrentPrice();
-            const tx = await signer.sendTransaction({
-                to: CONTRACT_ADDRESS,
-                value: price
-            });
-            showStatus("Transaction Sent: " + tx.hash);
+            const tx = await signer.sendTransaction({ to: CONTRACT_ADDRESS, value: price });
+            showStatus("Tx Sent: " + tx.hash);
             await tx.wait();
-            showStatus("Success! Transaction Confirmed.");
+            showStatus("Joined/Mined Successfully!");
             refreshData();
-        } catch (e) {
-            showStatus("Error: " + (e.reason || e.message));
-        }
+        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
     }
 
     async function burnTokens() {
-        if (!contract) return alert("Connect Wallet First");
-        const amount = document.getElementById("burnAmount").value;
-        if (!amount) return alert("Enter amount");
+        if (!contract) return alert("Connect Wallet");
+        const val = document.getElementById("burnAmount").value;
+        if (!val) return alert("Enter amount");
         try {
-            showStatus("Burning tokens...");
-            const weiAmount = ethers.utils.parseEther(amount);
-            const tx = await contract.burnSoap(weiAmount);
-            showStatus("Burn Pending: " + tx.hash);
+            showStatus("Burning...");
+            const tx = await contract.burnSoap(ethers.utils.parseEther(val));
+            showStatus("Tx Pending: " + tx.hash);
             await tx.wait();
             showStatus("Burn Confirmed!");
             refreshData();
-        } catch (e) {
-            showStatus("Error: " + (e.reason || e.message));
-        }
+        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
     }
 
     async function burnAll() {
-        if (!contract) return alert("Connect Wallet First");
-        if (!confirm("Are you sure you want to burn ALL tokens and exit?")) return;
+        if (!contract) return alert("Connect Wallet");
+        if (!confirm("Burn ALL tokens?")) return;
         try {
-            showStatus("Burning ALL tokens...");
+            showStatus("Emergency Burn...");
             const tx = await contract.burnAllSoap();
-            showStatus("Burn Pending: " + tx.hash);
+            showStatus("Tx Pending: " + tx.hash);
             await tx.wait();
-            showStatus("All Tokens Burned!");
+            showStatus("Exited Successfully!");
             refreshData();
-        } catch (e) {
-            showStatus("Error: " + (e.reason || e.message));
-        }
+        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
+    }
+
+    // --- ADVANCED FUNCTIONS ---
+    async function handleTransfer() {
+        if (!contract) return alert("Connect Wallet");
+        const to = document.getElementById("transferTo").value;
+        const amt = document.getElementById("transferAmount").value;
+        if(!to || !amt) return alert("Invalid Input");
+        try {
+            showStatus("Transferring...");
+            const tx = await contract.transfer(to, ethers.utils.parseEther(amt));
+            showStatus("Tx Pending: " + tx.hash);
+            await tx.wait();
+            showStatus("Transfer Complete");
+            refreshData();
+        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
+    }
+
+    async function handleApprove() {
+        if (!contract) return alert("Connect Wallet");
+        const sp = document.getElementById("approveSpender").value;
+        const amt = document.getElementById("approveAmount").value;
+        if(!sp || !amt) return alert("Invalid Input");
+        try {
+            showStatus("Approving...");
+            const tx = await contract.approve(sp, ethers.utils.parseEther(amt));
+            showStatus("Tx Pending: " + tx.hash);
+            await tx.wait();
+            showStatus("Approval Complete");
+        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
+    }
+
+    async function handleGoBig() {
+        if (!contract) return alert("Connect Wallet");
+        const val = document.getElementById("goBigAmount").value;
+        if(!val) return alert("Enter ETH Amount");
+        try {
+            showStatus("Going Big...");
+            const tx = await contract.goBig({ value: ethers.utils.parseEther(val) });
+            showStatus("Tx Pending: " + tx.hash);
+            await tx.wait();
+            showStatus("GO BIG Confirmed!");
+            refreshData();
+        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
+    }
+
+    async function handleDonate() {
+        if (!contract) return alert("Connect Wallet");
+        const val = document.getElementById("donateAmount").value;
+        if(!val) return alert("Enter ETH Amount");
+        try {
+            showStatus("Donating...");
+            const tx = await contract.donate({ value: ethers.utils.parseEther(val) });
+            showStatus("Tx Pending: " + tx.hash);
+            await tx.wait();
+            showStatus("Donation Received! Thank you.");
+            refreshData();
+        } catch (e) { showStatus("Error: " + (e.reason || e.message)); }
     }
 
     function showStatus(msg) {
@@ -540,11 +602,6 @@
         el.innerText = msg;
         el.classList.remove("hidden");
     }
-
-    // ==========================================
-    // --- PASTE YOUR CUSTOM LOGIC HERE ---
-    // ==========================================
-    
 </script>
 
 </body>
