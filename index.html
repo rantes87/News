@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neon Driver: Cruisin' Edition</title>
+    <title>Neon Driver: Zen Edition</title>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
     <style>
         body { margin: 0; padding: 0; background-color: #020202; overflow: hidden; touch-action: none; font-family: 'Courier New', Courier, monospace; user-select: none; -webkit-user-select: none; }
@@ -13,25 +13,25 @@
         #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         .interactive { pointer-events: auto !important; }
 
-        /* HUD - MOVED UP TO CLEAR SPACE */
-        #hud { position: absolute; top: 5px; width: 100%; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-        h1 { margin: 0; font-size: 40px; color: #fff; text-shadow: 0 0 15px #fff; font-weight: 800; line-height: 1; }
+        /* HUD */
+        #hud { position: absolute; top: 10px; width: 100%; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+        h1 { margin: 0; font-size: 45px; color: #fff; text-shadow: 0 0 15px #fff; font-weight: 800; line-height: 1; }
         .sub-text { font-size: 16px; color: #0ff; margin-top: 2px; text-shadow: 0 0 8px #0ff; font-weight: bold; }
-        .best-score-text { font-size: 12px; color: #aaa; margin-top: 1px; font-weight: bold; }
-        #health-bar-container { width: 180px; height: 10px; border: 1px solid #555; margin-top: 5px; background: #222; border-radius: 5px; overflow: hidden; }
+        .best-score-text { font-size: 12px; color: #aaa; margin-top: 2px; font-weight: bold; }
+        #health-bar-container { width: 200px; height: 10px; border: 1px solid #555; margin-top: 8px; background: #222; border-radius: 5px; overflow: hidden; }
         #health-fill { width: 100%; height: 100%; background-color: #0f0; transition: width 0.1s linear, background-color 0.2s; }
 
-        /* CORNER WIDGETS - SMALLER */
-        #coin-display { position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 5px; background: rgba(0, 0, 0, 0.6); padding: 4px 12px 4px 4px; border-radius: 30px; border: 1px solid #444; }
-        .coin-icon { width: 20px; height: 20px; background: #ffd700; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 8px #ffd700; }
+        /* WIDGETS */
+        #coin-display { position: absolute; top: 15px; left: 15px; display: flex; align-items: center; gap: 6px; background: rgba(0, 0, 0, 0.6); padding: 4px 12px 4px 4px; border-radius: 30px; border: 1px solid #444; }
+        .coin-icon { width: 22px; height: 22px; background: #ffd700; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 8px #ffd700; }
         #total-coins-text { color: #ffd700; font-size: 18px; font-weight: bold; text-shadow: 0 0 5px #ffd700; }
 
-        .top-btn { position: absolute; top: 10px; width: 35px; height: 35px; background: rgba(0, 255, 255, 0.1); border: 2px solid #0ff; border-radius: 50%; color: #0ff; font-size: 18px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 8px #0ff; }
+        .top-btn { position: absolute; top: 15px; width: 35px; height: 35px; background: rgba(0, 255, 255, 0.1); border: 2px solid #0ff; border-radius: 50%; color: #0ff; font-size: 18px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 8px #0ff; }
         .top-btn:active { background: #0ff; color: #000; }
-        #pause-btn { right: 10px; }
-        #sound-btn { right: 55px; }
+        #pause-btn { right: 15px; }
+        #sound-btn { right: 60px; }
         
-        #shop-btn { position: absolute; bottom: 20px; right: 20px; width: 50px; height: 50px; background: #111; border: 2px solid #ffd700; border-radius: 15px; color: #ffd700; font-size: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 15px #ffd700, inset 0 0 10px #ffd700; }
+        #shop-btn { position: absolute; bottom: 25px; right: 25px; width: 55px; height: 55px; background: #111; border: 3px solid #ffd700; border-radius: 16px; color: #ffd700; font-size: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 15px #ffd700, inset 0 0 10px #ffd700; }
         #shop-btn:active { transform: scale(0.95); background: #333; }
 
         .overlay-menu { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; background: rgba(5, 10, 15, 0.98); border: 3px solid #0ff; border-radius: 25px; padding: 25px; text-align: center; box-shadow: 0 0 60px rgba(0, 255, 255, 0.4); max-height: 85vh; overflow-y: auto; z-index: 20; }
@@ -51,7 +51,6 @@
         .level-pips { display:flex; gap:3px; margin-top:4px; }
         .pip { width: 12px; height: 5px; background: #333; border:1px solid #555; }
         .pip.active { background: #0f0; border-color:#fff; box-shadow: 0 0 5px #0f0; }
-        
         .buy-btn { padding: 8px 16px; border-radius: 20px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; font-family: inherit; }
 
         #alert-modal { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 300px; background: #100; border: 3px solid #f00; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 0 40px #f00; z-index: 100; }
@@ -59,7 +58,7 @@
         #alert-msg { color: #fff; font-size: 16px; margin-bottom: 20px; }
         @keyframes blink { 50% { opacity: 0.5; } }
 
-        .float-text { position: absolute; color: #ff0; font-weight: bold; font-size: 24px; pointer-events: none; text-shadow: 0 0 10px #ff0; animation: floatUp 0.8s forwards; z-index: 15; }
+        .float-text { position: absolute; color: #ff0; font-weight: bold; font-size: 28px; pointer-events: none; text-shadow: 0 0 10px #ff0; animation: floatUp 0.8s forwards; z-index: 15; }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(1.5); } }
         .control-hint { position: absolute; bottom: 30px; width: 35%; padding: 12px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); text-align: center; border-radius: 15px; pointer-events: none; font-size: 14px; font-weight: bold; z-index: 9; }
         #left-hint { left: 5%; } #right-hint { right: 5%; }
@@ -137,11 +136,11 @@
     const elShopMenu = document.getElementById('shop-menu');
     const elShopContainer = document.getElementById('shop-items-container');
     
-    // Config - NANO SCALE + SLOWER SPEED
-    const BASE_VERTICAL_SPEED = 4; // Slowed down from 7
-    const BASE_LATERAL_SPEED = 6;  // Slowed down from 9
+    // Config - ZEN SCALE & SPEED
+    const BASE_VERTICAL_SPEED = 3;  // SLOWED DOWN
+    const BASE_LATERAL_SPEED = 5;   // SMOOTHER HANDLING
     const LEVEL_SCORE_THRESHOLD = 1000; 
-    let MAGNET_RANGE = 120;        
+    let MAGNET_RANGE = 150;        
     const MAGNET_STRENGTH = 15;      
 
     // --- DATA ---
@@ -155,8 +154,8 @@
     ];
 
     const MODELS = [
-        { id: 'wedge', name: 'Interceptor', type: 'Wedge', price: 0, icon: '🚀', stats: { hp: 120, speed: 7, magnet: 120, desc: "Balanced Starter" } },
-        { id: 'tank', name: 'Titan', type: 'Rect', price: 250, icon: '🚛', stats: { hp: 200, speed: 7, magnet: 150, desc: "Max Armor" } },
+        { id: 'wedge', name: 'Interceptor', type: 'Wedge', price: 0, icon: '🚀', stats: { hp: 120, speed: 7, magnet: 150, desc: "Balanced Starter" } },
+        { id: 'tank', name: 'Titan', type: 'Rect', price: 250, icon: '🚛', stats: { hp: 200, speed: 7, magnet: 180, desc: "Max Armor" } },
         { id: 'saucer', name: 'Spectre', type: 'Circle', price: 750, icon: '🛸', stats: { hp: 150, speed: 9, magnet: 300, desc: "Max Magnet" } },
         { id: 'stinger', name: 'Stinger', type: 'Jet', price: 2000, icon: '✈️', stats: { hp: 150, speed: 11, magnet: 150, desc: "Hyper Speed" } },
         { id: 'omega', name: 'The Hare', type: 'Omega', price: 5000, icon: '🐰', stats: { hp: 300, speed: 13, magnet: 400, desc: "ULTIMATE POWER" } }
@@ -287,9 +286,9 @@
     }
 
     class Bullet {
-        constructor(x, y) { this.x = x; this.y = y; this.w = 3; this.h = 10; }
+        constructor(x, y) { this.x = x; this.y = y; this.w = 4; this.h = 14; }
         update(dtScale) { this.y -= 25 * dtScale; }
-        draw() { ctx.fillStyle = '#ff4500'; ctx.shadowBlur = 6; ctx.shadowColor = '#ff4500'; ctx.fillRect(this.x - this.w/2, this.y, this.w, this.h); ctx.shadowBlur = 0; }
+        draw() { ctx.fillStyle = '#ff4500'; ctx.shadowBlur = 8; ctx.shadowColor = '#ff4500'; ctx.fillRect(this.x - this.w/2, this.y, this.w, this.h); ctx.shadowBlur = 0; }
     }
 
     class Particle {
@@ -297,29 +296,29 @@
             this.x = x; this.y = y;
             const angle = Math.random() * Math.PI * 2; const speed = Math.random() * 12 + 4; 
             this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed;
-            this.alpha = 1; this.decay = Math.random() * 0.02 + 0.005; this.color = color; this.size = Math.random() * 4 + 2; this.gravity = 0.2; 
+            this.alpha = 1; this.decay = Math.random() * 0.02 + 0.005; this.color = color; this.size = Math.random() * 5 + 3; this.gravity = 0.2; 
         }
         update(dtScale) { this.x += this.vx * dtScale; this.y += this.vy * dtScale; this.vy += this.gravity * dtScale; this.alpha -= this.decay * dtScale; }
         draw() { ctx.globalAlpha = Math.max(0, this.alpha); if(this.alpha > 0.8) ctx.fillStyle = '#fff'; else if (this.alpha > 0.6) ctx.fillStyle = '#ff0'; else if (this.alpha > 0.3) ctx.fillStyle = '#f00'; else ctx.fillStyle = '#555'; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; }
     }
 
     class Trail {
-        constructor() { this.history = []; this.maxSize = 20; }
+        constructor() { this.history = []; this.maxSize = 25; }
         update(x, y) { this.history.push({x: x, y: y}); if(this.history.length > this.maxSize) this.history.shift(); }
         draw(baseWidth, color) {
             if(this.history.length < 1) return;
             const maxRadius = baseWidth * 0.5; const minRadius = maxRadius * 0.1;
-            ctx.shadowBlur = 10; ctx.shadowColor = color; ctx.fillStyle = color;
-            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = minRadius + (maxRadius - minRadius) * taperPct; ctx.globalAlpha = 0.3 + (taperPct * 0.5); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 35, currentRadius, 0, Math.PI * 2); ctx.fill(); }
-            ctx.shadowBlur = 5; ctx.shadowColor = '#fff'; ctx.fillStyle = '#fff';
-            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = (minRadius + (maxRadius - minRadius) * taperPct) * 0.4; ctx.globalAlpha = 0.6 + (taperPct * 0.4); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 35, currentRadius, 0, Math.PI * 2); ctx.fill(); }
+            ctx.shadowBlur = 20; ctx.shadowColor = color; ctx.fillStyle = color;
+            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = minRadius + (maxRadius - minRadius) * taperPct; ctx.globalAlpha = 0.3 + (taperPct * 0.5); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 40, currentRadius, 0, Math.PI * 2); ctx.fill(); }
+            ctx.shadowBlur = 8; ctx.shadowColor = '#fff'; ctx.fillStyle = '#fff';
+            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = (minRadius + (maxRadius - minRadius) * taperPct) * 0.4; ctx.globalAlpha = 0.6 + (taperPct * 0.4); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 40, currentRadius, 0, Math.PI * 2); ctx.fill(); }
             ctx.globalAlpha = 1; ctx.shadowBlur = 0;
         }
         reset() { this.history = []; }
     }
 
     const player = {
-        x: 0, y: 0, w: 20, h: 35, color: '#0ff', // NANO SCALE
+        x: 0, y: 0, w: 28, h: 48, color: '#0ff', // SCALED UP FROM NANO
         dx: 0, lateralSpeed: 9,
         maxHealth: 100, currentHealth: 100,
         isInvincible: false, invincibleTimer: 0,
@@ -327,7 +326,7 @@
         blasterTimer: 0, lastShotTime: 0, shieldRespawnTimer: 0,
 
         reset: function() {
-            this.x = canvas.width / 2 - 10; this.y = canvas.height - 120;
+            this.x = canvas.width / 2 - 14; this.y = canvas.height - 120;
             
             let model = MODELS.find(m => m.id === currentModelId);
             let skin = SKINS.find(s => s.id === currentSkin);
@@ -364,8 +363,8 @@
             const w = this.w; const h = this.h;
             const cx = this.x + w/2; const cy = this.y + h/2;
             
-            ctx.shadowBlur = 10; ctx.shadowColor = this.color;
-            ctx.fillStyle = this.color; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
+            ctx.shadowBlur = 12; ctx.shadowColor = this.color;
+            ctx.fillStyle = this.color; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
 
             let modelType = MODELS.find(m => m.id === currentModelId).type;
 
@@ -373,7 +372,7 @@
                 ctx.beginPath(); ctx.moveTo(this.x + w/2, this.y); ctx.lineTo(this.x + w, this.y + h*0.3); ctx.lineTo(this.x + w*0.9, this.y + h*0.9); ctx.lineTo(this.x + w/2, this.y + h); ctx.lineTo(this.x + w*0.1, this.y + h*0.9); ctx.lineTo(this.x, this.y + h*0.3); ctx.closePath(); ctx.fill(); ctx.stroke();
             } 
             else if (modelType === 'Rect') { 
-                ctx.fillRect(this.x, this.y, w, h); ctx.fillStyle = '#111'; ctx.fillRect(this.x + 2, this.y + 2, w-4, h-10); ctx.strokeRect(this.x, this.y, w, h);
+                ctx.fillRect(this.x, this.y, w, h); ctx.fillStyle = '#111'; ctx.fillRect(this.x + 3, this.y + 3, w-6, h-12); ctx.strokeRect(this.x, this.y, w, h);
             }
             else if (modelType === 'Circle') { 
                 ctx.beginPath(); ctx.arc(cx, cy, w/2, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx, cy, w/4, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(cx, cy, w/2, 0, Math.PI*2); ctx.stroke();
@@ -388,14 +387,14 @@
                 ctx.arc(0, 0, w/2.2, 0, Math.PI*2); 
                 ctx.moveTo(-w/4, -w/4); ctx.ellipse(-w/3, -h*0.6, w/6, h/3, -0.2, 0, Math.PI*2);
                 ctx.moveTo(w/4, -w/4); ctx.ellipse(w/3, -h*0.6, w/6, h/3, 0.2, 0, Math.PI*2);
-                ctx.fillStyle = '#ffd700'; ctx.fill(); ctx.lineWidth = 1; ctx.strokeStyle = '#fff'; ctx.stroke();
+                ctx.fillStyle = '#ffd700'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
                 ctx.restore();
             }
 
             ctx.shadowBlur = 0;
-            if (this.hasShield) { ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 2; ctx.shadowBlur = 8; ctx.shadowColor = '#00ffff'; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 25, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = 'rgba(0, 255, 255, 0.1)'; ctx.fill(); ctx.shadowBlur = 0; }
-            if (this.magnetTimer > 0) { ctx.strokeStyle = '#a020f0'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 22 + Math.sin(Date.now()*0.02)*4, 0, Math.PI*2); ctx.stroke(); }
-            if (this.blasterTimer > 0) { ctx.strokeStyle = '#ff4500'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 24 + Math.cos(Date.now()*0.02)*4, 0, Math.PI*2); ctx.stroke(); }
+            if (this.hasShield) { ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 3; ctx.shadowBlur = 10; ctx.shadowColor = '#00ffff'; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 35, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = 'rgba(0, 255, 255, 0.1)'; ctx.fill(); ctx.shadowBlur = 0; }
+            if (this.magnetTimer > 0) { ctx.strokeStyle = '#a020f0'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 30 + Math.sin(Date.now()*0.02)*6, 0, Math.PI*2); ctx.stroke(); }
+            if (this.blasterTimer > 0) { ctx.strokeStyle = '#ff4500'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 32 + Math.cos(Date.now()*0.02)*6, 0, Math.PI*2); ctx.stroke(); }
         },
         update: function(dtScale) {
             this.x += this.dx * dtScale;
@@ -433,15 +432,15 @@
             if (this.isInvincible) return;
             const isOmega = (currentModelId === 'omega');
             if (this.hasShield) { 
-                this.hasShield = false; this.isInvincible = true; this.invincibleTimer = 30; Sound.playSFX('break'); screenShake = 5; 
+                this.hasShield = false; this.isInvincible = true; this.invincibleTimer = 30; Sound.playSFX('break'); screenShake = 6; 
                 let shieldLvl = isOmega ? 3 : upgradeLevels.shield;
                 if(shieldLvl === 2) this.shieldRespawnTimer = 1800; 
                 if(shieldLvl === 3) this.shieldRespawnTimer = 900; 
                 return; 
             }
             this.currentHealth -= amount; this.isInvincible = true; this.invincibleTimer = 60; Sound.playSFX('crash');
-            if (this.currentHealth <= 0) { this.currentHealth = 0; screenShake = 40; triggerFlash('#fff'); triggerExplosion(this.x + this.w/2, this.y + this.h/2); } 
-            else { screenShake = 12; triggerFlash('#f00'); }
+            if (this.currentHealth <= 0) { this.currentHealth = 0; screenShake = 60; triggerFlash('#fff'); triggerExplosion(this.x + this.w/2, this.y + this.h/2); } 
+            else { screenShake = 18; triggerFlash('#f00'); }
             updateHealthUI();
         }
     };
@@ -456,16 +455,16 @@
     const OBS_COLORS = ['#f0f', '#f90', '#f00', '#fff', '#00f', '#0f0'];
     class Obstacle {
         constructor() {
-            const size = Math.random() * 20 + 15; // NANO SIZE: 15-35px
+            const size = Math.random() * 25 + 25; // SIZE 25-50px
             this.w = size; this.h = size;
-            this.x = Math.random() * (canvas.width - this.w); this.y = -50;
+            this.x = Math.random() * (canvas.width - this.w); this.y = -60;
             this.color = OBS_COLORS[(level - 1) % OBS_COLORS.length];
             this.driftOffset = Math.random() * Math.PI * 2;
             this.type = Math.floor(Math.random() * 3);
             this.angle = 0; this.rotationSpeed = (Math.random() - 0.5) * 0.1; 
         }
         draw() {
-            ctx.shadowBlur = 6; ctx.shadowColor = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 1;
+            ctx.shadowBlur = 10; ctx.shadowColor = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 2;
             const cx = this.x + this.w/2; const cy = this.y + this.h/2; const size = this.w / 2;
             ctx.save(); ctx.translate(cx, cy); ctx.rotate(this.angle);
             if (this.type === 0) { ctx.beginPath(); ctx.moveTo(0, -size); ctx.lineTo(size, 0); ctx.lineTo(0, size); ctx.lineTo(-size, 0); ctx.closePath(); ctx.fillStyle = this.color; ctx.globalAlpha = 0.8; ctx.fill(); } 
@@ -486,10 +485,10 @@
 
     let bonuses = [];
     class Bonus {
-        constructor() { this.r = 6; this.x = Math.random() * (canvas.width - (this.r*2)) + this.r; this.y = -50; this.color = '#ffd700'; this.spinOffset = Math.random() * Math.PI * 2; }
+        constructor() { this.r = 10; this.x = Math.random() * (canvas.width - (this.r*2)) + this.r; this.y = -50; this.color = '#ffd700'; this.spinOffset = Math.random() * Math.PI * 2; }
         draw() {
             const wobble = Math.abs(Math.sin((Date.now() / 200) + this.spinOffset)); const spinWidth = Math.max(0.1, wobble) * this.r;
-            ctx.save(); ctx.translate(this.x, this.y); ctx.shadowBlur = 5; ctx.shadowColor = this.color; ctx.beginPath(); ctx.ellipse(0, 0, spinWidth, this.r, 0, 0, Math.PI * 2); ctx.fillStyle = '#DAA520'; ctx.fill();
+            ctx.save(); ctx.translate(this.x, this.y); ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.beginPath(); ctx.ellipse(0, 0, spinWidth, this.r, 0, 0, Math.PI * 2); ctx.fillStyle = '#DAA520'; ctx.fill();
             ctx.shadowBlur = 0; const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.r); grad.addColorStop(0, '#FFF'); grad.addColorStop(0.3, '#FFD700'); grad.addColorStop(1, '#B8860B'); ctx.fillStyle = grad; ctx.beginPath(); ctx.ellipse(0, 0, spinWidth * 0.8, this.r * 0.8, 0, 0, Math.PI * 2); ctx.fill();
             if(wobble > 0.4) { ctx.fillStyle = '#996515'; ctx.font = `bold ${Math.floor(this.r)}px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.scale(wobble, 1); ctx.fillText('$', 0, 1); }
             ctx.restore();
@@ -504,7 +503,7 @@
     let powerups = [];
     class PowerUp {
         constructor() {
-            this.r = 9; this.x = Math.random() * (canvas.width - 20) + 10; this.y = -50;
+            this.r = 15; this.x = Math.random() * (canvas.width - 30) + 15; this.y = -50;
             this.type = Math.floor(Math.random() * 3); 
             if(this.type === 0) { this.color = '#00ffff'; this.icon = "🛡️"; }
             else if(this.type === 1) { this.color = '#a020f0'; this.icon = "🧲"; }
@@ -513,9 +512,9 @@
         draw() {
             const pulse = 1 + Math.sin(Date.now() * 0.01) * 0.1;
             ctx.save(); ctx.translate(this.x, this.y); ctx.scale(pulse, pulse);
-            ctx.shadowBlur = 10; ctx.shadowColor = this.color; 
+            ctx.shadowBlur = 12; ctx.shadowColor = this.color; 
             ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#fff'; ctx.font = "bold 10px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(this.icon, 0, 1);
+            ctx.fillStyle = '#fff'; ctx.font = "bold 14px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(this.icon, 0, 2);
             ctx.restore();
         }
         update(dtScale) { 
@@ -529,7 +528,7 @@
 
     let bullets = [];
     let stars = []; for(let i=0; i<50; i++) stars.push({x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, size: Math.random()*2, speed: Math.random()*2 + 1});
-    let mountains = []; for(let i=0; i<=20; i++) { mountains.push({x: i * (window.innerWidth/20), y: window.innerHeight - (15 + Math.random()*30)}); }
+    let mountains = []; for(let i=0; i<=20; i++) { mountains.push({x: i * (window.innerWidth/20), y: window.innerHeight - (20 + Math.random()*40)}); }
     let particles = []; let gridOffset = 0;
 
     function drawBackground(dtScale) {
@@ -572,8 +571,11 @@
         if (gameState === 'PLAYING') {
             score += (verticalSpeed * 0.05) * dtScale;
             elScore.innerText = Math.floor(score);
+            
+            // SLOWER ACCELERATION
             let newLevel = Math.floor(score / LEVEL_SCORE_THRESHOLD) + 1;
-            if (newLevel > level) { level = newLevel; verticalSpeed += 1.0; elLevel.innerText = "LEVEL " + level; }
+            if (newLevel > level) { level = newLevel; verticalSpeed += 0.2; elLevel.innerText = "LEVEL " + level; }
+            
             player.update(dtScale); player.draw(); updateHealthUI();
             
             if (Math.random() < (0.02 + level * 0.005) * dtScale) if (obstacles.length === 0 || obstacles[obstacles.length-1].y > 150) obstacles.push(new Obstacle());
@@ -592,7 +594,7 @@
                 
                 for (let j = bullets.length - 1; j >= 0; j--) {
                     let b = bullets[j]; let bDx = b.x - (obs.x + obs.w/2); let bDy = b.y - (obs.y + obs.h/2);
-                    if (Math.sqrt(bDx*bDx + bDy*bDy) < obsRadius + 4) { // Tighter collision padding
+                    if (Math.sqrt(bDx*bDx + bDy*bDy) < obsRadius + 4) {
                         createFloatingText("+100", obs.x, obs.y, '#ff4500'); Sound.playSFX('break'); 
                         for(let k=0; k<10; k++) particles.push(new Particle(obs.x+obs.w/2, obs.y+obs.h/2, obs.color));
                         obstacles.splice(i, 1); bullets.splice(j, 1); score += 100; break; 
@@ -630,6 +632,7 @@
         ctx.restore(); animationId = requestAnimationFrame(loop);
     }
 
+    // HANDLERS...
     function handleDriveInput(e) { if (e.cancelable && gameState === 'PLAYING') e.preventDefault(); if (gameState === 'START') { startNewGame(); return; } if (gameState !== 'PLAYING') return; let inputX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX; let moveSpeed = player.lateralSpeed + (level * 1.5); if (inputX < canvas.width / 2) player.dx = -moveSpeed; else player.dx = moveSpeed; Sound.revEngine(true); }
     function stopDriveInput(e) { if (e.cancelable) e.preventDefault(); player.dx = 0; Sound.revEngine(false); }
     touchZone.addEventListener('touchstart', handleDriveInput, {passive: false}); touchZone.addEventListener('touchend', stopDriveInput, {passive: false}); touchZone.addEventListener('mousedown', handleDriveInput); touchZone.addEventListener('mouseup', stopDriveInput); window.addEventListener('mouseup', stopDriveInput);
