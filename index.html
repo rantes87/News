@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Neon Driver: Zen Edition</title>
+    <title>Neon Driver: Precision Edition</title>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
     <style>
         body { margin: 0; padding: 0; background-color: #020202; overflow: hidden; touch-action: none; font-family: 'Courier New', Courier, monospace; user-select: none; -webkit-user-select: none; }
@@ -13,54 +13,54 @@
         #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
         .interactive { pointer-events: auto !important; }
 
-        /* HUD */
+        /* SCALED DOWN UI (~10%) */
         #hud { position: absolute; top: 10px; width: 100%; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-        h1 { margin: 0; font-size: 45px; color: #fff; text-shadow: 0 0 15px #fff; font-weight: 800; line-height: 1; }
-        .sub-text { font-size: 16px; color: #0ff; margin-top: 2px; text-shadow: 0 0 8px #0ff; font-weight: bold; }
-        .best-score-text { font-size: 12px; color: #aaa; margin-top: 2px; font-weight: bold; }
-        #health-bar-container { width: 200px; height: 10px; border: 1px solid #555; margin-top: 8px; background: #222; border-radius: 5px; overflow: hidden; }
+        h1 { margin: 0; font-size: 40px; color: #fff; text-shadow: 0 0 15px #fff; font-weight: 800; line-height: 1; }
+        .sub-text { font-size: 14px; color: #0ff; margin-top: 2px; text-shadow: 0 0 8px #0ff; font-weight: bold; }
+        .best-score-text { font-size: 11px; color: #aaa; margin-top: 2px; font-weight: bold; }
+        #health-bar-container { width: 180px; height: 9px; border: 1px solid #555; margin-top: 8px; background: #222; border-radius: 4px; overflow: hidden; }
         #health-fill { width: 100%; height: 100%; background-color: #0f0; transition: width 0.1s linear, background-color 0.2s; }
 
         /* WIDGETS */
-        #coin-display { position: absolute; top: 15px; left: 15px; display: flex; align-items: center; gap: 6px; background: rgba(0, 0, 0, 0.6); padding: 4px 12px 4px 4px; border-radius: 30px; border: 1px solid #444; }
-        .coin-icon { width: 22px; height: 22px; background: #ffd700; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 8px #ffd700; }
-        #total-coins-text { color: #ffd700; font-size: 18px; font-weight: bold; text-shadow: 0 0 5px #ffd700; }
+        #coin-display { position: absolute; top: 15px; left: 15px; display: flex; align-items: center; gap: 5px; background: rgba(0, 0, 0, 0.6); padding: 4px 10px 4px 4px; border-radius: 30px; border: 1px solid #444; }
+        .coin-icon { width: 20px; height: 20px; background: #ffd700; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 8px #ffd700; }
+        #total-coins-text { color: #ffd700; font-size: 16px; font-weight: bold; text-shadow: 0 0 5px #ffd700; }
 
-        .top-btn { position: absolute; top: 15px; width: 35px; height: 35px; background: rgba(0, 255, 255, 0.1); border: 2px solid #0ff; border-radius: 50%; color: #0ff; font-size: 18px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 8px #0ff; }
+        .top-btn { position: absolute; top: 15px; width: 32px; height: 32px; background: rgba(0, 255, 255, 0.1); border: 2px solid #0ff; border-radius: 50%; color: #0ff; font-size: 16px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 8px #0ff; }
         .top-btn:active { background: #0ff; color: #000; }
         #pause-btn { right: 15px; }
-        #sound-btn { right: 60px; }
+        #sound-btn { right: 55px; }
         
-        #shop-btn { position: absolute; bottom: 25px; right: 25px; width: 55px; height: 55px; background: #111; border: 3px solid #ffd700; border-radius: 16px; color: #ffd700; font-size: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 15px #ffd700, inset 0 0 10px #ffd700; }
+        #shop-btn { position: absolute; bottom: 25px; right: 25px; width: 50px; height: 50px; background: #111; border: 3px solid #ffd700; border-radius: 14px; color: #ffd700; font-size: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 0 15px #ffd700, inset 0 0 10px #ffd700; }
         #shop-btn:active { transform: scale(0.95); background: #333; }
 
-        .overlay-menu { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 400px; background: rgba(5, 10, 15, 0.98); border: 3px solid #0ff; border-radius: 25px; padding: 25px; text-align: center; box-shadow: 0 0 60px rgba(0, 255, 255, 0.4); max-height: 85vh; overflow-y: auto; z-index: 20; }
-        .overlay-menu h2 { color: #fff; font-size: 32px; margin: 0 0 15px 0; text-shadow: 0 0 15px #0ff; }
-        .stat-row { display: flex; justify-content: space-between; margin: 15px 0; color: #fff; font-size: 18px; border-bottom: 2px solid #333; padding-bottom: 8px; }
-        .stat-val { font-weight: bold; color: #0f0; font-size: 20px; }
-        button.action-btn { background: #0ff; color: #000; border: none; width: 100%; padding: 12px 0; font-size: 20px; font-weight: 900; border-radius: 40px; margin-top: 20px; cursor: pointer; box-shadow: 0 0 25px #0ff; font-family: inherit; text-transform: uppercase; }
-        .shop-section-title { text-align: left; color: #888; font-size: 14px; margin: 20px 0 8px 0; border-bottom: 1px solid #444; padding-bottom: 3px; font-weight: bold; letter-spacing: 2px; }
-        .shop-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); margin: 6px 0; padding: 10px; border-radius: 12px; border: 1px solid #333; }
-        .color-preview { width: 40px; height: 40px; border-radius: 8px; border: 2px solid #fff; }
-        .vehicle-preview { width: 50px; height: 50px; border-radius: 8px; border: 2px solid #fff; display:flex; align-items:center; justify-content:center; font-size:24px; background: #222; }
-        .upgrade-preview { width: 50px; height: 50px; border-radius: 8px; border: 2px solid #0f0; display:flex; align-items:center; justify-content:center; font-size:24px; background: #002200; color: #0f0; }
-        .item-info { flex-grow: 1; text-align: left; margin-left: 12px; color: #fff; }
-        .item-name { font-size: 16px; font-weight: bold; }
-        .item-desc { font-size: 11px; color: #aaa; margin-top: 2px; font-style: italic; }
-        .item-cost { color: #ffd700; font-size: 14px; margin-top: 2px; }
+        .overlay-menu { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 380px; background: rgba(5, 10, 15, 0.98); border: 3px solid #0ff; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 0 60px rgba(0, 255, 255, 0.4); max-height: 85vh; overflow-y: auto; z-index: 20; }
+        .overlay-menu h2 { color: #fff; font-size: 28px; margin: 0 0 15px 0; text-shadow: 0 0 15px #0ff; }
+        .stat-row { display: flex; justify-content: space-between; margin: 12px 0; color: #fff; font-size: 16px; border-bottom: 2px solid #333; padding-bottom: 6px; }
+        .stat-val { font-weight: bold; color: #0f0; font-size: 18px; }
+        button.action-btn { background: #0ff; color: #000; border: none; width: 100%; padding: 12px 0; font-size: 18px; font-weight: 900; border-radius: 30px; margin-top: 15px; cursor: pointer; box-shadow: 0 0 25px #0ff; font-family: inherit; text-transform: uppercase; }
+        .shop-section-title { text-align: left; color: #888; font-size: 13px; margin: 15px 0 8px 0; border-bottom: 1px solid #444; padding-bottom: 3px; font-weight: bold; letter-spacing: 2px; }
+        .shop-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); margin: 5px 0; padding: 8px; border-radius: 10px; border: 1px solid #333; }
+        .color-preview { width: 35px; height: 35px; border-radius: 8px; border: 2px solid #fff; }
+        .vehicle-preview { width: 45px; height: 45px; border-radius: 8px; border: 2px solid #fff; display:flex; align-items:center; justify-content:center; font-size:22px; background: #222; }
+        .upgrade-preview { width: 45px; height: 45px; border-radius: 8px; border: 2px solid #0f0; display:flex; align-items:center; justify-content:center; font-size:22px; background: #002200; color: #0f0; }
+        .item-info { flex-grow: 1; text-align: left; margin-left: 10px; color: #fff; }
+        .item-name { font-size: 15px; font-weight: bold; }
+        .item-desc { font-size: 10px; color: #aaa; margin-top: 2px; font-style: italic; }
+        .item-cost { color: #ffd700; font-size: 13px; margin-top: 2px; }
         .level-pips { display:flex; gap:3px; margin-top:4px; }
-        .pip { width: 12px; height: 5px; background: #333; border:1px solid #555; }
+        .pip { width: 10px; height: 4px; background: #333; border:1px solid #555; }
         .pip.active { background: #0f0; border-color:#fff; box-shadow: 0 0 5px #0f0; }
-        .buy-btn { padding: 8px 16px; border-radius: 20px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; font-family: inherit; }
+        .buy-btn { padding: 6px 14px; border-radius: 15px; border: none; font-weight: bold; font-size: 11px; cursor: pointer; font-family: inherit; }
 
-        #alert-modal { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 300px; background: #100; border: 3px solid #f00; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 0 40px #f00; z-index: 100; }
-        #alert-title { color: #f00; font-size: 22px; font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 10px #f00; animation: blink 0.5s infinite; }
-        #alert-msg { color: #fff; font-size: 16px; margin-bottom: 20px; }
+        #alert-modal { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 75%; max-width: 280px; background: #100; border: 3px solid #f00; border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 0 40px #f00; z-index: 100; }
+        #alert-title { color: #f00; font-size: 20px; font-weight: 900; margin-bottom: 8px; text-shadow: 0 0 10px #f00; animation: blink 0.5s infinite; }
+        #alert-msg { color: #fff; font-size: 14px; margin-bottom: 15px; }
         @keyframes blink { 50% { opacity: 0.5; } }
 
-        .float-text { position: absolute; color: #ff0; font-weight: bold; font-size: 28px; pointer-events: none; text-shadow: 0 0 10px #ff0; animation: floatUp 0.8s forwards; z-index: 15; }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(1.5); } }
-        .control-hint { position: absolute; bottom: 30px; width: 35%; padding: 12px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); text-align: center; border-radius: 15px; pointer-events: none; font-size: 14px; font-weight: bold; z-index: 9; }
+        .float-text { position: absolute; color: #ff0; font-weight: bold; font-size: 24px; pointer-events: none; text-shadow: 0 0 8px #ff0; animation: floatUp 0.8s forwards; z-index: 15; }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-40px) scale(1.5); } }
+        .control-hint { position: absolute; bottom: 30px; width: 35%; padding: 10px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); text-align: center; border-radius: 12px; pointer-events: none; font-size: 12px; font-weight: bold; z-index: 9; }
         #left-hint { left: 5%; } #right-hint { right: 5%; }
     </style>
 </head>
@@ -96,7 +96,7 @@
         </div>
 
         <div id="scorecard" class="overlay-menu interactive">
-            <h2 style="color:#f00; font-size:36px; animation: pulse 0.5s infinite">TERMINATED</h2>
+            <h2 style="color:#f00; font-size:32px; animation: pulse 0.5s infinite">TERMINATED</h2>
             <div class="stat-row"><span>Score</span><span class="stat-val" id="final-score">0</span></div>
             <div class="stat-row"><span>Coins Found</span><span class="stat-val" id="final-bonuses">0</span></div>
             <div class="stat-row"><span>High Score</span><span class="stat-val" id="best-score">0</span></div>
@@ -136,11 +136,11 @@
     const elShopMenu = document.getElementById('shop-menu');
     const elShopContainer = document.getElementById('shop-items-container');
     
-    // Config - ZEN SCALE & SPEED
-    const BASE_VERTICAL_SPEED = 3;  // SLOWED DOWN
-    const BASE_LATERAL_SPEED = 5;   // SMOOTHER HANDLING
+    // Config - PRECISION SCALE (10% smaller than Zen) & TUNED HANDLING
+    const BASE_VERTICAL_SPEED = 3;  
+    const BASE_LATERAL_SPEED = 4;   // Reduced from 5 to 4 for less twitch
     const LEVEL_SCORE_THRESHOLD = 1000; 
-    let MAGNET_RANGE = 150;        
+    let MAGNET_RANGE = 135;        
     const MAGNET_STRENGTH = 15;      
 
     // --- DATA ---
@@ -154,11 +154,11 @@
     ];
 
     const MODELS = [
-        { id: 'wedge', name: 'Interceptor', type: 'Wedge', price: 0, icon: '🚀', stats: { hp: 120, speed: 7, magnet: 150, desc: "Balanced Starter" } },
-        { id: 'tank', name: 'Titan', type: 'Rect', price: 250, icon: '🚛', stats: { hp: 200, speed: 7, magnet: 180, desc: "Max Armor" } },
-        { id: 'saucer', name: 'Spectre', type: 'Circle', price: 750, icon: '🛸', stats: { hp: 150, speed: 9, magnet: 300, desc: "Max Magnet" } },
-        { id: 'stinger', name: 'Stinger', type: 'Jet', price: 2000, icon: '✈️', stats: { hp: 150, speed: 11, magnet: 150, desc: "Hyper Speed" } },
-        { id: 'omega', name: 'The Hare', type: 'Omega', price: 5000, icon: '🐰', stats: { hp: 300, speed: 13, magnet: 400, desc: "ULTIMATE POWER" } }
+        { id: 'wedge', name: 'Interceptor', type: 'Wedge', price: 0, icon: '🚀', stats: { hp: 120, speed: 6, magnet: 135, desc: "Balanced Starter" } },
+        { id: 'tank', name: 'Titan', type: 'Rect', price: 250, icon: '🚛', stats: { hp: 200, speed: 6, magnet: 160, desc: "Max Armor" } },
+        { id: 'saucer', name: 'Spectre', type: 'Circle', price: 750, icon: '🛸', stats: { hp: 150, speed: 8, magnet: 270, desc: "Max Magnet" } },
+        { id: 'stinger', name: 'Stinger', type: 'Jet', price: 2000, icon: '✈️', stats: { hp: 150, speed: 10, magnet: 135, desc: "Hyper Speed" } },
+        { id: 'omega', name: 'The Hare', type: 'Omega', price: 5000, icon: '🐰', stats: { hp: 300, speed: 11, magnet: 360, desc: "ULTIMATE POWER" } }
     ];
 
     const UPGRADES = [
@@ -280,15 +280,15 @@
 
     // --- VISUAL CLASSES ---
     class Shockwave {
-        constructor(x, y) { this.x = x; this.y = y; this.r = 1; this.alpha = 1; this.width = 12; }
-        update(dt) { this.r += 18 * dt; this.width *= 0.9; this.alpha -= 0.02 * dt; }
+        constructor(x, y) { this.x = x; this.y = y; this.r = 1; this.alpha = 1; this.width = 10; }
+        update(dt) { this.r += 16 * dt; this.width *= 0.9; this.alpha -= 0.02 * dt; }
         draw() { if(this.alpha <= 0) return; ctx.save(); ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.lineWidth = this.width; ctx.strokeStyle = `rgba(255, 255, 255, ${this.alpha})`; ctx.stroke(); ctx.restore(); }
     }
 
     class Bullet {
-        constructor(x, y) { this.x = x; this.y = y; this.w = 4; this.h = 14; }
+        constructor(x, y) { this.x = x; this.y = y; this.w = 3; this.h = 12; }
         update(dtScale) { this.y -= 25 * dtScale; }
-        draw() { ctx.fillStyle = '#ff4500'; ctx.shadowBlur = 8; ctx.shadowColor = '#ff4500'; ctx.fillRect(this.x - this.w/2, this.y, this.w, this.h); ctx.shadowBlur = 0; }
+        draw() { ctx.fillStyle = '#ff4500'; ctx.shadowBlur = 6; ctx.shadowColor = '#ff4500'; ctx.fillRect(this.x - this.w/2, this.y, this.w, this.h); ctx.shadowBlur = 0; }
     }
 
     class Particle {
@@ -296,29 +296,29 @@
             this.x = x; this.y = y;
             const angle = Math.random() * Math.PI * 2; const speed = Math.random() * 12 + 4; 
             this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed;
-            this.alpha = 1; this.decay = Math.random() * 0.02 + 0.005; this.color = color; this.size = Math.random() * 5 + 3; this.gravity = 0.2; 
+            this.alpha = 1; this.decay = Math.random() * 0.02 + 0.005; this.color = color; this.size = Math.random() * 4 + 2; this.gravity = 0.2; 
         }
         update(dtScale) { this.x += this.vx * dtScale; this.y += this.vy * dtScale; this.vy += this.gravity * dtScale; this.alpha -= this.decay * dtScale; }
         draw() { ctx.globalAlpha = Math.max(0, this.alpha); if(this.alpha > 0.8) ctx.fillStyle = '#fff'; else if (this.alpha > 0.6) ctx.fillStyle = '#ff0'; else if (this.alpha > 0.3) ctx.fillStyle = '#f00'; else ctx.fillStyle = '#555'; ctx.fillRect(this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; }
     }
 
     class Trail {
-        constructor() { this.history = []; this.maxSize = 25; }
+        constructor() { this.history = []; this.maxSize = 20; }
         update(x, y) { this.history.push({x: x, y: y}); if(this.history.length > this.maxSize) this.history.shift(); }
         draw(baseWidth, color) {
             if(this.history.length < 1) return;
             const maxRadius = baseWidth * 0.5; const minRadius = maxRadius * 0.1;
             ctx.shadowBlur = 20; ctx.shadowColor = color; ctx.fillStyle = color;
-            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = minRadius + (maxRadius - minRadius) * taperPct; ctx.globalAlpha = 0.3 + (taperPct * 0.5); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 40, currentRadius, 0, Math.PI * 2); ctx.fill(); }
+            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = minRadius + (maxRadius - minRadius) * taperPct; ctx.globalAlpha = 0.3 + (taperPct * 0.5); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 35, currentRadius, 0, Math.PI * 2); ctx.fill(); }
             ctx.shadowBlur = 8; ctx.shadowColor = '#fff'; ctx.fillStyle = '#fff';
-            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = (minRadius + (maxRadius - minRadius) * taperPct) * 0.4; ctx.globalAlpha = 0.6 + (taperPct * 0.4); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 40, currentRadius, 0, Math.PI * 2); ctx.fill(); }
+            for(let i = this.history.length - 1; i >= 0; i--) { const point = this.history[i]; let taperPct = i / Math.max(1, this.history.length - 1); let currentRadius = (minRadius + (maxRadius - minRadius) * taperPct) * 0.4; ctx.globalAlpha = 0.6 + (taperPct * 0.4); ctx.beginPath(); ctx.arc(point.x + baseWidth/2, point.y + 35, currentRadius, 0, Math.PI * 2); ctx.fill(); }
             ctx.globalAlpha = 1; ctx.shadowBlur = 0;
         }
         reset() { this.history = []; }
     }
 
     const player = {
-        x: 0, y: 0, w: 28, h: 48, color: '#0ff', // SCALED UP FROM NANO
+        x: 0, y: 0, w: 25, h: 43, color: '#0ff', // SCALED DOWN 10%
         dx: 0, lateralSpeed: 9,
         maxHealth: 100, currentHealth: 100,
         isInvincible: false, invincibleTimer: 0,
@@ -326,7 +326,7 @@
         blasterTimer: 0, lastShotTime: 0, shieldRespawnTimer: 0,
 
         reset: function() {
-            this.x = canvas.width / 2 - 14; this.y = canvas.height - 120;
+            this.x = canvas.width / 2 - 12.5; this.y = canvas.height - 110;
             
             let model = MODELS.find(m => m.id === currentModelId);
             let skin = SKINS.find(s => s.id === currentSkin);
@@ -363,8 +363,8 @@
             const w = this.w; const h = this.h;
             const cx = this.x + w/2; const cy = this.y + h/2;
             
-            ctx.shadowBlur = 12; ctx.shadowColor = this.color;
-            ctx.fillStyle = this.color; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+            ctx.shadowBlur = 10; ctx.shadowColor = this.color;
+            ctx.fillStyle = this.color; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
 
             let modelType = MODELS.find(m => m.id === currentModelId).type;
 
@@ -387,14 +387,14 @@
                 ctx.arc(0, 0, w/2.2, 0, Math.PI*2); 
                 ctx.moveTo(-w/4, -w/4); ctx.ellipse(-w/3, -h*0.6, w/6, h/3, -0.2, 0, Math.PI*2);
                 ctx.moveTo(w/4, -w/4); ctx.ellipse(w/3, -h*0.6, w/6, h/3, 0.2, 0, Math.PI*2);
-                ctx.fillStyle = '#ffd700'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
+                ctx.fillStyle = '#ffd700'; ctx.fill(); ctx.lineWidth = 1; ctx.strokeStyle = '#fff'; ctx.stroke();
                 ctx.restore();
             }
 
             ctx.shadowBlur = 0;
-            if (this.hasShield) { ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 3; ctx.shadowBlur = 10; ctx.shadowColor = '#00ffff'; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 35, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = 'rgba(0, 255, 255, 0.1)'; ctx.fill(); ctx.shadowBlur = 0; }
-            if (this.magnetTimer > 0) { ctx.strokeStyle = '#a020f0'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 30 + Math.sin(Date.now()*0.02)*6, 0, Math.PI*2); ctx.stroke(); }
-            if (this.blasterTimer > 0) { ctx.strokeStyle = '#ff4500'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 32 + Math.cos(Date.now()*0.02)*6, 0, Math.PI*2); ctx.stroke(); }
+            if (this.hasShield) { ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 2; ctx.shadowBlur = 8; ctx.shadowColor = '#00ffff'; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 32, 0, Math.PI * 2); ctx.stroke(); ctx.fillStyle = 'rgba(0, 255, 255, 0.1)'; ctx.fill(); ctx.shadowBlur = 0; }
+            if (this.magnetTimer > 0) { ctx.strokeStyle = '#a020f0'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 28 + Math.sin(Date.now()*0.02)*5, 0, Math.PI*2); ctx.stroke(); }
+            if (this.blasterTimer > 0) { ctx.strokeStyle = '#ff4500'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(this.x + w/2, this.y + h/2, 30 + Math.cos(Date.now()*0.02)*5, 0, Math.PI*2); ctx.stroke(); }
         },
         update: function(dtScale) {
             this.x += this.dx * dtScale;
@@ -432,15 +432,15 @@
             if (this.isInvincible) return;
             const isOmega = (currentModelId === 'omega');
             if (this.hasShield) { 
-                this.hasShield = false; this.isInvincible = true; this.invincibleTimer = 30; Sound.playSFX('break'); screenShake = 6; 
+                this.hasShield = false; this.isInvincible = true; this.invincibleTimer = 30; Sound.playSFX('break'); screenShake = 5; 
                 let shieldLvl = isOmega ? 3 : upgradeLevels.shield;
                 if(shieldLvl === 2) this.shieldRespawnTimer = 1800; 
                 if(shieldLvl === 3) this.shieldRespawnTimer = 900; 
                 return; 
             }
             this.currentHealth -= amount; this.isInvincible = true; this.invincibleTimer = 60; Sound.playSFX('crash');
-            if (this.currentHealth <= 0) { this.currentHealth = 0; screenShake = 60; triggerFlash('#fff'); triggerExplosion(this.x + this.w/2, this.y + this.h/2); } 
-            else { screenShake = 18; triggerFlash('#f00'); }
+            if (this.currentHealth <= 0) { this.currentHealth = 0; screenShake = 50; triggerFlash('#fff'); triggerExplosion(this.x + this.w/2, this.y + this.h/2); } 
+            else { screenShake = 15; triggerFlash('#f00'); }
             updateHealthUI();
         }
     };
@@ -455,16 +455,16 @@
     const OBS_COLORS = ['#f0f', '#f90', '#f00', '#fff', '#00f', '#0f0'];
     class Obstacle {
         constructor() {
-            const size = Math.random() * 25 + 25; // SIZE 25-50px
+            const size = Math.random() * 23 + 22; // SCALED DOWN: 22-45px
             this.w = size; this.h = size;
-            this.x = Math.random() * (canvas.width - this.w); this.y = -60;
+            this.x = Math.random() * (canvas.width - this.w); this.y = -50;
             this.color = OBS_COLORS[(level - 1) % OBS_COLORS.length];
             this.driftOffset = Math.random() * Math.PI * 2;
             this.type = Math.floor(Math.random() * 3);
             this.angle = 0; this.rotationSpeed = (Math.random() - 0.5) * 0.1; 
         }
         draw() {
-            ctx.shadowBlur = 10; ctx.shadowColor = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 2;
+            ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.strokeStyle = this.color; ctx.lineWidth = 1;
             const cx = this.x + this.w/2; const cy = this.y + this.h/2; const size = this.w / 2;
             ctx.save(); ctx.translate(cx, cy); ctx.rotate(this.angle);
             if (this.type === 0) { ctx.beginPath(); ctx.moveTo(0, -size); ctx.lineTo(size, 0); ctx.lineTo(0, size); ctx.lineTo(-size, 0); ctx.closePath(); ctx.fillStyle = this.color; ctx.globalAlpha = 0.8; ctx.fill(); } 
@@ -485,10 +485,10 @@
 
     let bonuses = [];
     class Bonus {
-        constructor() { this.r = 10; this.x = Math.random() * (canvas.width - (this.r*2)) + this.r; this.y = -50; this.color = '#ffd700'; this.spinOffset = Math.random() * Math.PI * 2; }
+        constructor() { this.r = 9; this.x = Math.random() * (canvas.width - (this.r*2)) + this.r; this.y = -50; this.color = '#ffd700'; this.spinOffset = Math.random() * Math.PI * 2; }
         draw() {
             const wobble = Math.abs(Math.sin((Date.now() / 200) + this.spinOffset)); const spinWidth = Math.max(0.1, wobble) * this.r;
-            ctx.save(); ctx.translate(this.x, this.y); ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.beginPath(); ctx.ellipse(0, 0, spinWidth, this.r, 0, 0, Math.PI * 2); ctx.fillStyle = '#DAA520'; ctx.fill();
+            ctx.save(); ctx.translate(this.x, this.y); ctx.shadowBlur = 6; ctx.shadowColor = this.color; ctx.beginPath(); ctx.ellipse(0, 0, spinWidth, this.r, 0, 0, Math.PI * 2); ctx.fillStyle = '#DAA520'; ctx.fill();
             ctx.shadowBlur = 0; const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.r); grad.addColorStop(0, '#FFF'); grad.addColorStop(0.3, '#FFD700'); grad.addColorStop(1, '#B8860B'); ctx.fillStyle = grad; ctx.beginPath(); ctx.ellipse(0, 0, spinWidth * 0.8, this.r * 0.8, 0, 0, Math.PI * 2); ctx.fill();
             if(wobble > 0.4) { ctx.fillStyle = '#996515'; ctx.font = `bold ${Math.floor(this.r)}px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.scale(wobble, 1); ctx.fillText('$', 0, 1); }
             ctx.restore();
@@ -503,7 +503,7 @@
     let powerups = [];
     class PowerUp {
         constructor() {
-            this.r = 15; this.x = Math.random() * (canvas.width - 30) + 15; this.y = -50;
+            this.r = 13; this.x = Math.random() * (canvas.width - 26) + 13; this.y = -50;
             this.type = Math.floor(Math.random() * 3); 
             if(this.type === 0) { this.color = '#00ffff'; this.icon = "🛡️"; }
             else if(this.type === 1) { this.color = '#a020f0'; this.icon = "🧲"; }
@@ -514,7 +514,7 @@
             ctx.save(); ctx.translate(this.x, this.y); ctx.scale(pulse, pulse);
             ctx.shadowBlur = 12; ctx.shadowColor = this.color; 
             ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(0, 0, this.r, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle = '#fff'; ctx.font = "bold 14px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(this.icon, 0, 2);
+            ctx.fillStyle = '#fff'; ctx.font = "bold 13px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(this.icon, 0, 1);
             ctx.restore();
         }
         update(dtScale) { 
@@ -528,7 +528,7 @@
 
     let bullets = [];
     let stars = []; for(let i=0; i<50; i++) stars.push({x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, size: Math.random()*2, speed: Math.random()*2 + 1});
-    let mountains = []; for(let i=0; i<=20; i++) { mountains.push({x: i * (window.innerWidth/20), y: window.innerHeight - (20 + Math.random()*40)}); }
+    let mountains = []; for(let i=0; i<=20; i++) { mountains.push({x: i * (window.innerWidth/20), y: window.innerHeight - (15 + Math.random()*30)}); }
     let particles = []; let gridOffset = 0;
 
     function drawBackground(dtScale) {
@@ -571,11 +571,8 @@
         if (gameState === 'PLAYING') {
             score += (verticalSpeed * 0.05) * dtScale;
             elScore.innerText = Math.floor(score);
-            
-            // SLOWER ACCELERATION
             let newLevel = Math.floor(score / LEVEL_SCORE_THRESHOLD) + 1;
-            if (newLevel > level) { level = newLevel; verticalSpeed += 0.2; elLevel.innerText = "LEVEL " + level; }
-            
+            if (newLevel > level) { level = newLevel; verticalSpeed += 0.5; elLevel.innerText = "LEVEL " + level; }
             player.update(dtScale); player.draw(); updateHealthUI();
             
             if (Math.random() < (0.02 + level * 0.005) * dtScale) if (obstacles.length === 0 || obstacles[obstacles.length-1].y > 150) obstacles.push(new Obstacle());
@@ -633,7 +630,7 @@
     }
 
     // HANDLERS...
-    function handleDriveInput(e) { if (e.cancelable && gameState === 'PLAYING') e.preventDefault(); if (gameState === 'START') { startNewGame(); return; } if (gameState !== 'PLAYING') return; let inputX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX; let moveSpeed = player.lateralSpeed + (level * 1.5); if (inputX < canvas.width / 2) player.dx = -moveSpeed; else player.dx = moveSpeed; Sound.revEngine(true); }
+    function handleDriveInput(e) { if (e.cancelable && gameState === 'PLAYING') e.preventDefault(); if (gameState === 'START') { startNewGame(); return; } if (gameState !== 'PLAYING') return; let inputX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX; let moveSpeed = player.lateralSpeed + (level * 0.8); if (inputX < canvas.width / 2) player.dx = -moveSpeed; else player.dx = moveSpeed; Sound.revEngine(true); }
     function stopDriveInput(e) { if (e.cancelable) e.preventDefault(); player.dx = 0; Sound.revEngine(false); }
     touchZone.addEventListener('touchstart', handleDriveInput, {passive: false}); touchZone.addEventListener('touchend', stopDriveInput, {passive: false}); touchZone.addEventListener('mousedown', handleDriveInput); touchZone.addEventListener('mouseup', stopDriveInput); window.addEventListener('mouseup', stopDriveInput);
     function togglePause() { if (gameState === 'PLAYING') { gameState = 'PAUSED'; elPauseMenu.style.display = 'block'; elShopBtn.style.display = 'none'; Sound.playSFX('click'); Sound.stopEngine(); } else if (gameState === 'PAUSED') { gameState = 'PLAYING'; elPauseMenu.style.display = 'none'; lastTime = performance.now(); Sound.playSFX('click'); Sound.startEngine(); loop(lastTime); } }
